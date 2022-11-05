@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+">
+
+    <!--1、mvc注解驱动-->
+    <mvc:annotation-driven>
+<!--        解决乱码问题-->
+        <mvc:message-converters>
+            <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+                <property name="supportedMediaTypes">
+                    <list>
+                        <value>application/json;charset=UTF-8</value>
+                        <value>text/plain;charset=UTF-8</value>
+                        <value>text/html;charset=UTF-8</value>
+                        <value>text/json;charset=UTF-8</value>
+                    </list>
+                </property>
+            </bean>
+        </mvc:message-converters>
+
+    </mvc:annotation-driven>
+    <!--<mvc:annotation-driven/>-->
+
+    <!--2、配置视图解析器InternalResourceViewResolver-->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+<!--        指定前缀后缀-->
+        <property name="prefix" value="/pages/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+    <!--<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/pages/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>-->
+
+    <!--配置文件上传解析器-->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="defaultEncoding" value="UTF-8"/>
+        <property name="maxUploadSize" value="500000"/>
+        <!-- 内存中的最大值 -->
+        <property name="maxInMemorySize" value="40960" />
+        <!-- 指定上传文件的临时路径 -->
+        <!-- <property name="uploadTempDir" value="uploadTempDirectory" /> -->
+    </bean>
+
+    <!--3、静态资源权限开放-->
+    <mvc:default-servlet-handler/>
+<!--    <mvc:default-servlet-handler/>-->
+
+    <!--4、组件扫描  扫描web层Controller，业务层和dao层配使用配置文件的方式-->
+    <context:component-scan base-package="com.cjy.controller"/>
+    <context:component-scan base-package="com.cjy.service"/>
+
+    <!--配置权限拦截器-->
+    <mvc:interceptors>
+        <mvc:interceptor>
+<!--            配置哪些资源进行拦截操作-->
+            <mvc:mapping path="/**"/>
+<!--            配置对哪些资源排除拦截操作-->
+            <mvc:exclude-mapping path="/user/login"/>
+            <bean class="com.cjy.interceptor.PrivilegeInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
+</beans>

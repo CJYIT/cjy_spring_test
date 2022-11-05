@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style type="text/css">
+        *{
+            margin:0px;
+            padding:0px;
+        }
+        /* 触发弹窗图片的样式 */
+        .myImg {
+            margin: 10px;
+            border-radius: 20px;
+            cursor: pointer;
+            float: left;
+            max-height: 130px;
+        }
+
+        /* 弹窗的位置和背景颜色 */
+        .modal {
+            display: none;
+            position: fixed; /* 绝对定位 */
+            z-index: 1; /* 元素置前 */
+            padding-top: 50px;
+            width: 100%;
+            height: 100%;
+            overflow: auto; /* 溢出出现滚动条 */
+        }
+
+        /* 弹窗图片的大小 */
+        .content {
+            margin: auto;
+            display: block;
+            min-height:500px;
+            max-height:600px;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <!-- 图片 -->
+    <img loading="lazy" id="Img1" class="myImg" src="F:/03.png" onclick="demo('Img1')">
+    <!-- 弹窗 -->
+    <div id="myModal" class="modal" onclick="document.getElementById('myModal').style.display='none'">
+        <!-- 弹窗内容 -->
+        <img class="content" id="img01">
+    </div>
+    <!--相应图片点击操作-->
+    <script>
+        function demo(imgId) {
+            document.getElementById('myModal').style.display = "block";
+            document.getElementById("img01").src = document.getElementById(imgId).src;
+        }
+    </script>
+</div>
+</body>
+
+</html>
